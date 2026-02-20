@@ -2,7 +2,7 @@
 
 > *The staff of Hermes — carried between worlds, broker of messages, connector of realms.*
 
-**Caduceus** is a personal integration hub running on a Raspberry Pi 4. It aggregates data from Google (Calendar, Tasks, Gmail), weather services, task managers, and AI tools into a single clean REST API — consumed primarily by [**Huginn**](https://github.com/{user}/huginn), the Presto desk display, but designed as a general-purpose personal data API.
+**Caduceus** is a personal integration hub running on a Raspberry Pi 4. It aggregates data from Google (Calendar, Tasks, Gmail), weather services, task managers, and AI tools into a single clean REST API — consumed primarily by [**Huginn**](https://github.com/dreffed/huginn), the Presto desk display, but designed as a general-purpose personal data API.
 
 It also consumes a RabbitMQ queue, allowing external automation tools (IFTTT, Zapier, n8n) to push events and trigger actions — bridging the event-driven world of automations with the request-driven world of your devices.
 
@@ -60,7 +60,7 @@ It also consumes a RabbitMQ queue, allowing external automation tools (IFTTT, Za
 ### 1. Clone
 
 ```bash
-git clone https://github.com/{user}/caduceus.git
+git clone https://github.com/dreffed/caduceus.git
 cd caduceus
 ```
 
@@ -94,8 +94,8 @@ scp ./data/google_token.json pi@{pi-ip}:/opt/caduceus/data/
 docker-compose up -d
 ```
 
-The API is available at `http://{pi-ip}:8000`.  
-RabbitMQ management UI: `http://{pi-ip}:15672` (guest/guest in dev).  
+The API is available at `http://{pi-ip}:8000`.
+RabbitMQ management UI: `http://{pi-ip}:15672` (guest/guest in dev).
 API docs (auto-generated): `http://{pi-ip}:8000/docs`
 
 ### 5. Verify
@@ -244,7 +244,7 @@ Supported actions: `refresh.calendar`, `refresh.tasks`, `refresh.weather`, `refr
 
 Caduceus uses GitHub Actions for automated deployment to the Raspberry Pi 4.
 
-**On Pull Request:** ruff lint → mypy type check → pytest → ARM64 Docker build check  
+**On Pull Request:** ruff lint → mypy type check → pytest → ARM64 Docker build check
 **On merge to `main`:** Build ARM64 image → push to GitHub Container Registry → SSH to Pi → pull + restart → health check
 
 Required GitHub Secrets:
@@ -289,7 +289,7 @@ The **Caduceus** is the winged staff carried by Hermes (Mercury) — the god of 
 
 The two intertwined serpents represent streams of information weaving together. The wings represent the speed of delivery.
 
-Caduceus serves [**Huginn**](https://github.com/{user}/huginn) — Odin's raven of Thought — by moving between the worlds of Google, weather services, and task managers, and returning with intelligence for the raven to display.
+Caduceus serves [**Huginn**](https://github.com/dreffed/huginn) — Odin's raven of Thought — by moving between the worlds of Google, weather services, and task managers, and returning with intelligence for the raven to display.
 
 ---
 
@@ -307,4 +307,4 @@ Caduceus serves [**Huginn**](https://github.com/{user}/huginn) — Odin's raven 
 
 ## Related Projects
 
-- [**Huginn**](https://github.com/{user}/huginn) — the Pimoroni Presto display that consumes this API
+- [**Huginn**](https://github.com/dreffed/huginn) — the Pimoroni Presto display that consumes this API
