@@ -1,0 +1,72 @@
+version: "3.9"
+
+networks:
+  presto-net:
+    driver: bridge
+
+volumes:
+  hub_data:
+  redis_data:
+  rabbitmq_data:
+
+services:
+  hub:
+    build: .
+    image: ghcr.io/dreffed/caduceus:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - hub_data:/data
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - presto-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  redis:
+    image: redis:7-alpine
+    platform: linux/arm64
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 64mb --maxmemory-policy allkeys-lru
+    networks:
+      - presto-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - presto-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
